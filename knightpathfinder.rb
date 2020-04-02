@@ -5,17 +5,26 @@ class KnightPathFinder
     def initialize(position)
         @start = position
         @considered_moves = []
+        @parent = PositionNode.new(@start)
         self.build_move_tree
     end
 
     def find_path(position)
-        @end = position
+        result = trace_back_path(@parent.bfs(position))
+        result.reverse
     end
 
+    def trace_back_path(target_node)
+        result = []
+        return [@start] if target_node.position == @start
+        result << target_node.position
+        result = result.concat(trace_back_path(target_node.parent))
+        result
+    end
+    
     def build_move_tree
         queue = []
-        parent = PositionNode.new(@start)
-        queue << parent
+        queue << @parent
         until queue == []
             current_parent = queue.shift
             new_positions = self.new_move_positions(current_parent.position)
@@ -62,5 +71,7 @@ end
 #code for testing
 
 kpf = KnightPathFinder.new([0, 0])
-# p kpf.find_path([2,1]
-# p kpf.find_path([3,3]))
+p kpf.find_path([2, 1])
+p kpf.find_path([3, 3])
+p kpf.find_path([7, 6])
+p kpf.find_path([6, 2])

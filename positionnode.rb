@@ -17,28 +17,6 @@ class PositionNode
         end
     end
 
-    def add_child(child)
-        child.parent=(self)
-    end
-
-    def remove_child(child)
-        if self.children.include?(child)
-            child.parent=(nil)
-        else
-            raise error
-        end
-    end
-
-    def dfs(position)
-        return self if self.position == position
-        return nil if self.children.length == 0
-        self.children.each do |child|
-            result = child.dfs(position)
-            return result if result != nil
-        end
-        nil
-    end 
-
     def bfs(position)
         queue = []
         queue << self
