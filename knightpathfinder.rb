@@ -11,7 +11,7 @@ class KnightPathFinder
     end
 
     def build_move_tree
-
+        
     end
 
     def self.valid_moves(position)
@@ -32,8 +32,11 @@ class KnightPathFinder
     end
 
     def new_move_positions(position)
-        self.valid_moves(position)
-        # unless @considered_moves.include?()
+        unless @considered_moves.include?(position)
+            new_positions = KnightPathFinder.valid_moves(position)
+        end
+        @considered_moves = @considered_moves.concat(new_positions)
+        new_positions
     end
 
 end
