@@ -1,8 +1,10 @@
+require_relative 'positionnode'
+
 class KnightPathFinder
 
     def initialize(position)
         @start = position
-        @considered_moves = [position]
+        @considered_moves = []
         self.build_move_tree
     end
 
@@ -11,7 +13,23 @@ class KnightPathFinder
     end
 
     def build_move_tree
-        
+        queue = []
+        parent = PositionNode.new(@start)
+        queue << parent
+        until queue == []
+            current_parent = queue.shift
+            new_positions = self.new_move_positions(current_parent.position)
+            unless new_positions == nil
+                new_positions.each do |position|
+                    unless @considered_moves.include?(position)
+                        new_child = PositionNode.new(position)
+                        new_child.parent=(current_parent)
+                        queue << new_child
+                    end
+                end
+            end
+            @considered_moves << current_parent.position
+        end
     end
 
     def self.valid_moves(position)
@@ -34,9 +52,9 @@ class KnightPathFinder
     def new_move_positions(position)
         unless @considered_moves.include?(position)
             new_positions = KnightPathFinder.valid_moves(position)
+            return new_positions
         end
-        @considered_moves = @considered_moves.concat(new_positions)
-        new_positions
+        nil
     end
 
 end
